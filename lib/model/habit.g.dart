@@ -24,13 +24,14 @@ class HabitAdapter extends TypeAdapter<Habit> {
       desc: fields[4] as String,
       complete: fields[5] as bool,
       target: (fields[6] as num).toInt(),
+      lastCompletion: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.days)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..writeByte(5)
       ..write(obj.complete)
       ..writeByte(6)
-      ..write(obj.target);
+      ..write(obj.target)
+      ..writeByte(7)
+      ..write(obj.lastCompletion);
   }
 
   @override

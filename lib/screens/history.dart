@@ -15,16 +15,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void delete(BuildContext context,Habit habit){
     showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text("Delete archive ?"),
-      actions: [
-        ElevatedButton(onPressed: ()async{
+      content: Text("Do you want to delete the archive '${habit.habit}'?"),
+      actions: [        
+        TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child:const Text("Cancel")),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.redAccent,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+          onPressed: ()async{
           await context.read<Archivedstoragecubit>().archiveDel(habit);
           Navigator.of(context).pop();
-        }, child:const Text("Yes")),
-        
-        ElevatedButton(onPressed: (){
-          Navigator.of(context).pop();
-        }, child:const Text("No")),
+        }, child:const Text("Yes",style: TextStyle(color: Colors.white),)),
       ],
     );
     });
@@ -54,13 +60,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
             }
             return ListView.builder(itemCount: state.entries.length, itemBuilder:(context, index){
               final entry = state.entries[index];
-              return ListTile(
-                leading: Text("Days\n ${entry.days}"),
-                title: Text(entry.habit),
-                subtitle: Text(entry.desc),
-                trailing: IconButton(onPressed: (){
-                        delete(context, entry);
-                      }, icon:const Icon(Icons.delete_rounded))
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [BoxShadow(
+                      color: const Color.fromARGB(255, 0, 0, 0),blurRadius: 16,
+                      offset: const Offset(4, 8),
+                    )],
+                    gradient: LinearGradient(colors: [const Color.fromARGB(255, 20, 15, 38),
+                      const Color.fromARGB(255, 12, 10, 25),]),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white30,width: 1.2, style: BorderStyle.solid)
+                  ),
+                  child: ListTile(
+                    leading: Text("Days\n ${entry.days}"),
+                    title: Text(entry.habit),
+                    subtitle: Text(entry.desc),
+                    trailing: IconButton(onPressed: (){
+                            delete(context, entry);
+                          }, icon:const Icon(Icons.delete_rounded))
+                  ),
+                ),
               );
             });
           }

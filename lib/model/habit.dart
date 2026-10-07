@@ -25,6 +25,10 @@ class Habit {
   @HiveField(6)
   final int target;
 
+  @HiveField(7)
+  final String? lastCompletion;
+  
+
   Habit({
     required this.days,
     required this.habit,
@@ -32,6 +36,20 @@ class Habit {
     required this.id,
     required this.desc,
     required this.complete,
-    required this.target
+    required this.target,
+    this.lastCompletion
   });
+
+  Habit copyWith({int? days,bool? complete, String? lastCompletion}){
+    return Habit(
+      days: days ?? this.days,
+      habit: habit,
+      date: date,
+      id: id,
+      desc: desc,
+      complete: complete ?? this.complete,
+      target: target,
+      lastCompletion: lastCompletion ?? this.lastCompletion
+    );
+  }
 }

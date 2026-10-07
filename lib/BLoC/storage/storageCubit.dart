@@ -39,4 +39,9 @@ class StorageCubit extends Cubit<StorageState>{
     await storage.archiveHabit(habit);
     await loadEntries();
   }
+
+  Future<void> markComplete(Habit habit)async{
+    await storage.completedHabitToday(habit);
+    await loadEntries();
+  }
 }
