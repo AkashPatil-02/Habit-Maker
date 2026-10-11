@@ -44,4 +44,9 @@ class StorageCubit extends Cubit<StorageState>{
     await storage.completedHabitToday(habit);
     await loadEntries();
   }
+
+  Future<void> undoHabit(Habit habit)async{
+    await storage.undoCompletedHabit(habit);
+    await loadEntries();
+  }
 }

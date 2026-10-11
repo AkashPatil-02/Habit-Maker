@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habitmaker/screens/navBar.dart';
-import 'package:lottie/lottie.dart';
+import 'package:habitmaker/authwrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -45,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const NavBar()),
+        MaterialPageRoute(builder: (context) => const Authwrapper()),
       );
     }
   }
@@ -58,7 +57,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       body: Container(

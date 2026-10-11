@@ -40,7 +40,13 @@ class Habit {
     this.lastCompletion
   });
 
-  Habit copyWith({int? days,bool? complete, String? lastCompletion}){
+  static const Object _sentinel = Object();
+
+  Habit copyWith({
+    int? days,
+    bool? complete,
+    Object? lastCompletion = _sentinel,
+  }) {
     return Habit(
       days: days ?? this.days,
       habit: habit,
@@ -49,7 +55,9 @@ class Habit {
       desc: desc,
       complete: complete ?? this.complete,
       target: target,
-      lastCompletion: lastCompletion ?? this.lastCompletion
+      lastCompletion: lastCompletion == _sentinel
+          ? this.lastCompletion
+          : lastCompletion as String?,
     );
   }
 }

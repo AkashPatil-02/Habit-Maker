@@ -2,10 +2,12 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitmaker/BLoC/theme/themeCubit.dart';
-import 'package:habitmaker/screens/createHabit.dart';
-import 'package:habitmaker/screens/currentActivites.dart';
-import 'package:habitmaker/screens/history.dart';
+import 'package:habitmaker/screens/mainScreens/createHabit.dart';
+import 'package:habitmaker/screens/mainScreens/currentActivites.dart';
+import 'package:habitmaker/screens/mainScreens/history.dart';
+import 'package:habitmaker/services/googleAuth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/auth.dart' as auth;
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -47,6 +49,13 @@ class _NavBarState extends State<NavBar> {
     });
   }
 
+  void _signOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    auth.FirebaseAuthService().signOut();
+    GoogleAuthService().signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     const bottomGradientColor = Color.fromARGB(255, 52, 41, 83);
@@ -78,6 +87,13 @@ class _NavBarState extends State<NavBar> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            onPressed: _signOut,
+            icon: Icon(
+              Icons.logout_rounded,
+              color: Colors.redAccent,
+            ),
+          ),          
           IconButton(
             onPressed: changeTheme,
             icon: Icon(

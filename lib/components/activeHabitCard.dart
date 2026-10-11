@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitmaker/BLoC/storage/archivedStorageCubit.dart';
 import 'package:habitmaker/BLoC/storage/storageCubit.dart';
 import 'package:habitmaker/model/habit.dart';
-import 'package:habitmaker/screens/activityDetail.dart';
+import 'package:habitmaker/screens/mainScreens/activityDetail.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -58,6 +58,25 @@ class Activehabitcard extends StatelessWidget {
     if (percentage <= 75) return Colors.amber;
     if (percentage < 100) return Colors.lightGreenAccent;
     return Colors.cyanAccent;
+  }
+
+  Widget showUndoButton(Habit habit, BuildContext context) {
+    if(habit.complete){
+      return ElevatedButton.icon(
+        onPressed: () async {
+          await HapticFeedback.vibrate();
+          await context.read<StorageCubit>().undoHabit(habit);
+        },
+        icon: const Icon(Icons.undo, size: 20),
+        label: const Text("Undo"),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orangeAccent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   @override
@@ -227,7 +246,13 @@ class Activehabitcard extends StatelessWidget {
                         ],
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(child: const SizedBox(width: 8)),
+                        showUndoButton(habit,context),
+                      ],
+                    ),
+                    
                     ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: SizedBox(

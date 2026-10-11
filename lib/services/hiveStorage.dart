@@ -75,7 +75,11 @@ class Hivestorage {
     final todaystr = _formatDate(today);
     final todayDate = DateTime(today.year,today.month,today.day);
 
-    if(habit.lastCompletion==todaystr) return;
+    if(habit.lastCompletion==todaystr) {
+      print("Habit already completed today");
+      print("Habit: ${habit.habit}, lastCompletion: ${habit.lastCompletion}, today: $todaystr");
+      return;
+    };
 
     int newStreak=1;
     if(habit.lastCompletion!=null){
@@ -89,6 +93,23 @@ class Hivestorage {
       days: newStreak,
       complete: true,
       lastCompletion: todaystr,
+    );
+    await box.put(habit.id,updatedHabit);
+  }
+  Future<void> undoCompletedHabit(Habit habit)async{
+    final box = Hive.box<Habit>(_active);
+    final today = DateTime.now();
+    final todaystr = _formatDate(today);
+    final yesterday = today.subtract(const Duration(days: 1));
+    final yesterdayDate = DateTime(yesterday.year, yesterday.month, yesterday.day);
+    print("Undoing habit: ${habit.habit}, lastCompletion: ${habit.lastCompletion}, today: $todaystr, yesterday: ${_formatDate(yesterdayDate)}");
+
+    if(habit.lastCompletion!=todaystr) return;
+
+    final updatedHabit = habit.copyWith(
+      days: (habit.days - 1).clamp(0, 999999),
+      complete: false,
+      lastCompletion: habit.days > 1 ? _formatDate(yesterdayDate) : null,
     );
     await box.put(habit.id,updatedHabit);
   }
